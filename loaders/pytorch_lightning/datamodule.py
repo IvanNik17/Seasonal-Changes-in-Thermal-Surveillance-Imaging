@@ -13,7 +13,7 @@ import os
 import pandas as pd
 import albumentations as Augment
 
-from src.dataset import Dataset
+from dataset import Dataset
 
 class DataModule(pl.LightningDataModule):
     def __init__(self, cfg):

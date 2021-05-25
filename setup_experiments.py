@@ -324,7 +324,7 @@ if __name__ == '__main__':
 
     output_dir = "splits"
 
-    num_frames = 100 # 5000
+    num_frames = 5000# 100 # 5000
 
     # Coldest day, week, month
     cold_day, cold_week, cold_month = get_experiment_data_v2(metadata,"min")
