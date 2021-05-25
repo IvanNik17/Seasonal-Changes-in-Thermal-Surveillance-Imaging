@@ -20,7 +20,8 @@ class DataModule(pl.LightningDataModule):
         super().__init__()
         self.cfg = cfg
 
-        self.mean, self.std = [0.5], [0.5]
+        #self.mean, self.std = [0.5], [0.5]
+        self.mean, self.std = [0.0], [1.0] # seems to work best
 
     def get_train_transform(self):
         return Augment.Compose([Augment.RandomBrightnessContrast(p=0.75),
@@ -31,24 +32,30 @@ class DataModule(pl.LightningDataModule):
         return Augment.Compose([Augment.Normalize(self.mean, self.std)
                                ])
 
-    def setup(self, stage='fit'):
-        if stage == 'fit':
-            self.data_train = Dataset(img_dir=self.cfg['img_dir'], metadata=self.cfg['metadata_train'], return_metadata = False, transforms=self.get_train_transform())
-
+    def setup(self, stage=None):
+        if stage == 'fit' or stage is None:
+            self.data_train = Dataset(img_dir=self.cfg.img_dir,
+                                      selection=self.cfg.test_selection,
+                                      return_metadata = self.cfg.get_metadata,
+                                      transforms=self.get_train_transform())
             val_start_idx = int(len(self.data_train) * 0.8)
             self.data_val = Subset(self.data_train, range(val_start_idx, len(self.data_train)))
             self.data_train = Subset(self.data_train, range(0, val_start_idx))
 
-            self.data_test = Dataset(img_dir=self.cfg['img_dir'], metadata=self.cfg['metadata_test'], return_metadata = False, transforms=self.get_test_transform())
+        if stage == 'test' or stage is None:
+            self.data_test = Dataset(img_dir=self.cfg.img_dir,
+                                     selection=self.cfg.test_selection,
+                                     return_metadata = self.cfg.get_metadata,
+                                     transforms=self.get_test_transform())
 
     def train_dataloader(self):
-        return DataLoader(self.data_train, batch_size=self.cfg['batch_size'], shuffle=True)
+        return DataLoader(self.data_train, batch_size=self.cfg.batch_size, num_workers=self.cfg.num_workers, shuffle=True)
 
     def val_dataloader(self):
-        return DataLoader(self.data_val, batch_size=self.cfg['batch_size'], shuffle=False)
+        return DataLoader(self.data_val, batch_size=self.cfg.batch_size, num_workers=self.cfg.num_workers, shuffle=False)
 
     def test_dataloader(self):
-        return DataLoader(self.data_test, batch_size=self.cfg['batch_size'], shuffle=False)
+        return DataLoader(self.data_test, batch_size=self.cfg.batch_size, num_workers=self.cfg.num_workers, shuffle=False)
 
 
 if __name__ == '__main__':
@@ -56,18 +63,19 @@ if __name__ == '__main__':
     #  path to the images, it should also contain the metadata csv file. The metadata file entries and images need to coincide
     images_path = "path-to-images"
 
-    metadata_train = pd.read_csv("path-to/coldest_day.csv")
-    metadata_train["DateTime"] = pd.to_datetime(metadata_train['DateTime'])
+    train = pd.read_csv("path-to/coldest_day.csv")
+    train["DateTime"] = pd.to_datetime(train['DateTime'])
 
-    metadata_test = pd.read_csv("path-to/hottest_day.csv")
-    metadata_test["DateTime"] = pd.to_datetime(metadata_train['DateTime'])
+    test = pd.read_csv("path-to/hottest_day.csv")
+    test["DateTime"] = pd.to_datetime(test['DateTime'])
 
     cfg = {
        'img_dir': images_path,
-       'metadata_train': metadata_train,
-       'metadata_test': metadata_test,
+       'train_samples': train,
+       'test_samples': test,
        'get_metadata': True,
        'batch_size': 16,
+       'num_workers': 8,
     }
 
     # instantiate the class and give it the cfg dictionary, call the setup

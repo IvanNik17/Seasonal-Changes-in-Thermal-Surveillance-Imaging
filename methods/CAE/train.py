@@ -20,8 +20,7 @@ torch.backends.cudnn.benchmark = True
 def train(hparams, dm):
     #logger = loggers.TensorBoardLogger(hparams.log_dir, name=f"da{hparams.data_root}_is{hparams.image_size}_nc{hparams.nc}")
     model = Autoencoder(hparams)
-    # print detailed summary with estimated network size
-    #summary(model, (hparams.nc, hparams.image_width, hparams.image_height), device="cpu")
+
     trainer = Trainer(gpus=hparams.gpus, max_epochs=hparams.max_epochs)
     trainer.fit(model, dm)
     trainer.test(model)

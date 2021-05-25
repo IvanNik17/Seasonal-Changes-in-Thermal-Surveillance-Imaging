@@ -27,17 +27,17 @@ For initializing the class the inputs are:
 '''
 
 class Dataset(torch.utils.data.Dataset):
-    def __init__(self, img_dir, metadata, return_metadata = True, transforms=None, check_data = False, pattern_img = '.jpg'):
+    def __init__(self, img_dir, selection, return_metadata = True, transforms=None, check_data = False, pattern_img = '.jpg'):
 
-        self.metadata = metadata
+        self.selection = selection
         self.return_metadata = return_metadata
         self.transforms = transforms
 
         #  create a list of image directories from the metadata entries
         if platform == "linux" or platform == "linux2" or platform == "darwin":
-            self.image_list = img_dir + "/" + metadata["Folder name"].astype(str) + "/" + metadata["Clip Name"].astype(str) + "/" + "image_" +  self.metadata["Image Number"].astype(str).str.zfill(4) + pattern_img
+            self.image_list = img_dir + "/" + selection["Folder name"].astype(str) + "/" + selection["Clip Name"].astype(str) + "/" + "image_" +  selection["Image Number"].astype(str).str.zfill(4) + pattern_img
         else:
-            self.image_list = img_dir + "\\" + metadata["Folder name"].astype(str) + "\\" + metadata["Clip Name"].astype(str) + "\\" + "image_" +  self.metadata["Image Number"].astype(str).str.zfill(4) + pattern_img
+            self.image_list = img_dir + "\\" + selection["Folder name"].astype(str) + "\\" + selection["Clip Name"].astype(str) + "\\" + "image_" +  selection["Image Number"].astype(str).str.zfill(4) + pattern_img
 
         # check if list is empty
         if not len(self.image_list)>0:
@@ -73,7 +73,7 @@ class Dataset(torch.utils.data.Dataset):
         img_file = img_path_split[-1].split(".")[0].split("_")[1]
 
         # print(f" {img_folder}          {img_file}")
-        curr_metadata = self.metadata[(self.metadata["Folder name"]== int(img_folder))&(self.metadata["Clip Name"]== clip_file)&(self.metadata["Image Number"]== int(img_file))].dropna()
+        curr_metadata = self.selection[(self.selection["Folder name"]== int(img_folder))&(self.selection["Clip Name"]== clip_file)&(self.selection["Image Number"]== int(img_file))].dropna()
 
         return curr_metadata
 
