@@ -117,7 +117,7 @@ if __name__ == '__main__':
 
     metadata_selected = metadata[(metadata["DateTime"].dt.day>=1) & (metadata["DateTime"].dt.day<=7) & (metadata["DateTime"].dt.month==2)]
 
-    dataset = DatasetWithMetadata(img_dir=images_path, metadata = metadata_selected, return_metadata = True)
+    dataset = Dataset(img_dir=images_path, metadata = metadata_selected, return_metadata = True)
 
     # trial = next(iter(dataset))
 
