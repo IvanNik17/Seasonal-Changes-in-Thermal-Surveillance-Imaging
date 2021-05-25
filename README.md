@@ -28,7 +28,8 @@ python extract_images.py
 
 **Create data splits for experiments (optional)**
 
-Outputs csv files for each data split in 'splits/'
+Outputs csv files for each data split in 'splits/'. The default number of frames that are selected per split is 100. This number can be increased to 5000 incase labels are not needed.
+
 ```bash
 python setup_experiments.py
 ```

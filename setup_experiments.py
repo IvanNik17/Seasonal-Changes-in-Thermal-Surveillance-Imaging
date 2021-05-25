@@ -338,28 +338,29 @@ if __name__ == '__main__':
     cold_week_frames.to_csv(os.path.join(output_dir,"coldest_week.csv"),index=False)
     cold_month_frames.to_csv(os.path.join(output_dir,"coldest_month.csv"),index=False)
 
-    #TODO: coldest offset or january for best case test
-
-
+    #Best case month set as January
+    best_case_month = metadata[metadata["DateTime"].dt.month == 1]
+    best_case_frames = extract_frames_metadata(best_case_month, ["Temperature"], num_frames = num_frames)
+    best_case_frames.to_csv(os.path.join(output_dir,"best_case_month.csv"),index=False)
 
     # # Hottest day, week, month
     hot_day, hot_week, hot_month = get_experiment_data_v2(metadata,"max")
 
-    hot_day_frames = extract_frames_metadata(hot_day, ["Temperature"], num_frames = num_frames)
-    hot_week_frames = extract_frames_metadata(hot_week, ["Temperature"], num_frames = num_frames)
+    # hot_day_frames = extract_frames_metadata(hot_day, ["Temperature"], num_frames = num_frames)
+    # hot_week_frames = extract_frames_metadata(hot_week, ["Temperature"], num_frames = num_frames)
     hot_month_frames = extract_frames_metadata(hot_month, ["Temperature"], num_frames = num_frames)
 
-    hot_day_frames.to_csv(os.path.join(output_dir,"hottest_day.csv"),index=False)
-    hot_week_frames.to_csv(os.path.join(output_dir,"hottest_week.csv"),index=False)
+    # hot_day_frames.to_csv(os.path.join(output_dir,"hottest_day.csv"),index=False)
+    # hot_week_frames.to_csv(os.path.join(output_dir,"hottest_week.csv"),index=False)
     hot_month_frames.to_csv(os.path.join(output_dir,"hottest_month.csv"),index=False)
 
     # Median day, week, month
     mid_day, mid_week, mid_month = get_experiment_data_v2(metadata,"median")
 
-    mid_day_frames = extract_frames_metadata(mid_day, ["Temperature"], num_frames = num_frames)
-    mid_week_frames = extract_frames_metadata(mid_week, ["Temperature"], num_frames = num_frames)
+    # mid_day_frames = extract_frames_metadata(mid_day, ["Temperature"], num_frames = num_frames)
+    # mid_week_frames = extract_frames_metadata(mid_week, ["Temperature"], num_frames = num_frames)
     mid_month_frames = extract_frames_metadata(mid_month, ["Temperature"], num_frames = num_frames)
 
-    mid_day_frames.to_csv(os.path.join(output_dir,"median_day.csv"),index=False)
-    mid_week_frames.to_csv(os.path.join(output_dir,"median_week.csv"),index=False)
+    # mid_day_frames.to_csv(os.path.join(output_dir,"median_day.csv"),index=False)
+    # mid_week_frames.to_csv(os.path.join(output_dir,"median_week.csv"),index=False)
     mid_month_frames.to_csv(os.path.join(output_dir,"median_month.csv"),index=False)
