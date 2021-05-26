@@ -63,10 +63,10 @@ if __name__ == '__main__':
     #  path to the images, it should also contain the metadata csv file. The metadata file entries and images need to coincide
     images_path = "path-to-images"
 
-    train = pd.read_csv("path-to/coldest_day.csv")
+    train = pd.read_csv("path-to/feb_day.csv")
     train["DateTime"] = pd.to_datetime(train['DateTime'])
 
-    test = pd.read_csv("path-to/hottest_day.csv")
+    test = pd.read_csv("path-to/aug_day.csv")
     test["DateTime"] = pd.to_datetime(test['DateTime'])
 
     cfg = {

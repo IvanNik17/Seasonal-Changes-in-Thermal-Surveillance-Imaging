@@ -19,11 +19,11 @@ from argparse import Namespace
 
 def train(model, hparams, logger):
 
-    train = pd.read_csv("../../splits/{}_{}.csv".format(hparams.season, hparams.dataset))
+    train = pd.read_csv("../../splits/{}_{}_5000.csv".format(hparams.season, hparams.dataset))
     train["DateTime"] = pd.to_datetime(train['DateTime'])
     hparams.train_selection = train
 
-    test = pd.read_csv("../../splits/median_month.csv")
+    test = pd.read_csv("../../splits/apr_month.csv")
     test["DateTime"] = pd.to_datetime(test['DateTime'])
     hparams.test_selection = test
 
@@ -140,7 +140,7 @@ if __name__ == "__main__":
     # defualt configuration
     hparams = Namespace(**{'model': 'VQVAE2',
                            'dataset': 'day',
-                           'season': 'coldest',
+                           'season': 'feb',
                            'img_dir': '/home/aau/github/data/thermal/sensor_paper',
                            'train_selection': None,
                            'test_selection': None,
@@ -168,6 +168,6 @@ if __name__ == "__main__":
     if args.train:
         train(model, hparams, logger)
 
-    test_sets = ['best_case_month', 'median_month', 'hottest_month']
+    test_sets = ['jan', 'apr', 'aug']
 
     test(model, hparams, test_sets, show=args.show)

@@ -334,14 +334,14 @@ if __name__ == '__main__':
     cold_month_frames = extract_frames_metadata(cold_month, ["Temperature"], num_frames = 5000)
     # debug_visualization(week_small, week_inds)
 
-    cold_day_frames.to_csv(os.path.join(output_dir,"coldest_day.csv"),index=False)
-    cold_week_frames.to_csv(os.path.join(output_dir,"coldest_week.csv"),index=False)
-    cold_month_frames.to_csv(os.path.join(output_dir,"coldest_month.csv"),index=False)
+    cold_day_frames.to_csv(os.path.join(output_dir,"feb_day.csv"),index=False)
+    cold_week_frames.to_csv(os.path.join(output_dir,"feb_week.csv"),index=False)
+    cold_month_frames.to_csv(os.path.join(output_dir,"feb_month.csv"),index=False)
 
     #Best case month set as January
     best_case_month = metadata[metadata["DateTime"].dt.month == 1]
     best_case_frames = extract_frames_metadata(best_case_month, ["Temperature"], num_frames = 100)
-    best_case_frames.to_csv(os.path.join(output_dir,"best_case_month.csv"),index=False)
+    best_case_frames.to_csv(os.path.join(output_dir,"jan_month.csv"),index=False)
 
     # # Hottest day, week, month
     hot_day, hot_week, hot_month = get_experiment_data_v2(metadata,"max")
@@ -352,7 +352,7 @@ if __name__ == '__main__':
 
     # hot_day_frames.to_csv(os.path.join(output_dir,"hottest_day.csv"),index=False)
     # hot_week_frames.to_csv(os.path.join(output_dir,"hottest_week.csv"),index=False)
-    hot_month_frames.to_csv(os.path.join(output_dir,"hottest_month.csv"),index=False)
+    hot_month_frames.to_csv(os.path.join(output_dir,"aug_month.csv"),index=False)
 
     # Median day, week, month
     mid_day, mid_week, mid_month = get_experiment_data_v2(metadata,"median")
@@ -363,4 +363,4 @@ if __name__ == '__main__':
 
     # mid_day_frames.to_csv(os.path.join(output_dir,"median_day.csv"),index=False)
     # mid_week_frames.to_csv(os.path.join(output_dir,"median_week.csv"),index=False)
-    mid_month_frames.to_csv(os.path.join(output_dir,"median_month.csv"),index=False)
+    mid_month_frames.to_csv(os.path.join(output_dir,"apr_month.csv"),index=False)
