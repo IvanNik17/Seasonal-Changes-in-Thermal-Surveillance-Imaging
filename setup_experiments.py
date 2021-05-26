@@ -324,14 +324,14 @@ if __name__ == '__main__':
 
     output_dir = "splits"
 
-    num_frames = 5000# 100 # 5000
+    #num_frames = 100 for test # 100 or 5000 for train
 
     # Coldest day, week, month
     cold_day, cold_week, cold_month = get_experiment_data_v2(metadata,"min")
 
-    cold_day_frames = extract_frames_metadata(cold_day, ["Temperature"], num_frames = num_frames)
-    cold_week_frames = extract_frames_metadata(cold_week, ["Temperature"], num_frames = num_frames)
-    cold_month_frames = extract_frames_metadata(cold_month, ["Temperature"], num_frames = num_frames)
+    cold_day_frames = extract_frames_metadata(cold_day, ["Temperature"], num_frames = 5000)
+    cold_week_frames = extract_frames_metadata(cold_week, ["Temperature"], num_frames = 5000)
+    cold_month_frames = extract_frames_metadata(cold_month, ["Temperature"], num_frames = 5000)
     # debug_visualization(week_small, week_inds)
 
     cold_day_frames.to_csv(os.path.join(output_dir,"coldest_day.csv"),index=False)
@@ -340,7 +340,7 @@ if __name__ == '__main__':
 
     #Best case month set as January
     best_case_month = metadata[metadata["DateTime"].dt.month == 1]
-    best_case_frames = extract_frames_metadata(best_case_month, ["Temperature"], num_frames = num_frames)
+    best_case_frames = extract_frames_metadata(best_case_month, ["Temperature"], num_frames = 100)
     best_case_frames.to_csv(os.path.join(output_dir,"best_case_month.csv"),index=False)
 
     # # Hottest day, week, month
@@ -348,7 +348,7 @@ if __name__ == '__main__':
 
     # hot_day_frames = extract_frames_metadata(hot_day, ["Temperature"], num_frames = num_frames)
     # hot_week_frames = extract_frames_metadata(hot_week, ["Temperature"], num_frames = num_frames)
-    hot_month_frames = extract_frames_metadata(hot_month, ["Temperature"], num_frames = num_frames)
+    hot_month_frames = extract_frames_metadata(hot_month, ["Temperature"], num_frames = 100)
 
     # hot_day_frames.to_csv(os.path.join(output_dir,"hottest_day.csv"),index=False)
     # hot_week_frames.to_csv(os.path.join(output_dir,"hottest_week.csv"),index=False)
@@ -359,7 +359,7 @@ if __name__ == '__main__':
 
     # mid_day_frames = extract_frames_metadata(mid_day, ["Temperature"], num_frames = num_frames)
     # mid_week_frames = extract_frames_metadata(mid_week, ["Temperature"], num_frames = num_frames)
-    mid_month_frames = extract_frames_metadata(mid_month, ["Temperature"], num_frames = num_frames)
+    mid_month_frames = extract_frames_metadata(mid_month, ["Temperature"], num_frames = 100)
 
     # mid_day_frames.to_csv(os.path.join(output_dir,"median_day.csv"),index=False)
     # mid_week_frames.to_csv(os.path.join(output_dir,"median_week.csv"),index=False)

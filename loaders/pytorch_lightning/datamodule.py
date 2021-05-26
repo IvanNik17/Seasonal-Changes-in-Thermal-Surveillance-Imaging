@@ -35,7 +35,7 @@ class DataModule(pl.LightningDataModule):
     def setup(self, stage=None):
         if stage == 'fit' or stage is None:
             self.data_train = Dataset(img_dir=self.cfg.img_dir,
-                                      selection=self.cfg.test_selection,
+                                      selection=self.cfg.train_selection,
                                       return_metadata = self.cfg.get_metadata,
                                       transforms=self.get_train_transform())
             val_start_idx = int(len(self.data_train) * 0.8)
