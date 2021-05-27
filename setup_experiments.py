@@ -282,8 +282,10 @@ def extract_frames_metadata(metadata, features, num_frames = 100, reserved_at_en
 
 # debug function for visualization of the additional information that can be extracted from the extract_frames_metadata function
 # the Debug variable should be set to True to get the needed daily_smaller and all_indices lists for visualization
-def debug_visualization(all_daily_smaller, all_indices):
+def debug_visualization(all_daily_smaller, all_indices, max_temp, min_temp):
 
+    
+    denormalizer = (max_temp-min_temp)
     fig = plt.figure()
     ax = fig.add_subplot(111)
     for i in range(0, len(all_daily_smaller)):
@@ -293,14 +295,14 @@ def debug_visualization(all_daily_smaller, all_indices):
 
 
 
-        ax.scatter(curr_day_small['Numbering']+i, curr_day_small['Temperature'], s=5, c="blue", alpha=0.5)
+        ax.scatter(curr_day_small['Numbering']+i, (curr_day_small['Temperature']*denormalizer)+min_temp, s=5, c="blue", alpha=0.5)
 
-        ax.scatter(curr_day_small.iloc[curr_day_indices]['Numbering']+i, curr_day_small.iloc[curr_day_indices]['Temperature'], s=5, c="red", alpha=1)
+        ax.scatter(curr_day_small.iloc[curr_day_indices]['Numbering']+i, (curr_day_small.iloc[curr_day_indices]['Temperature']*denormalizer)+min_temp,marker = "o", s=15, c="red", alpha=1)
 
 
     plt.xlabel('Day')
     plt.ylabel('Temperature')
-    ax.set_aspect('equal', adjustable='box')
+    ax.set_aspect('auto')
 
 
 def debug_visualization_v2(metadata, selected_metadata):
