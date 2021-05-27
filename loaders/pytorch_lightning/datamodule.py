@@ -49,13 +49,13 @@ class DataModule(pl.LightningDataModule):
                                      transforms=self.get_test_transform())
 
     def train_dataloader(self):
-        return DataLoader(self.data_train, batch_size=self.cfg.batch_size, num_workers=self.cfg.num_workers, shuffle=True)
+        return DataLoader(self.data_train, batch_size=self.cfg.batch_size, num_workers=self.cfg.num_workers, shuffle=True, pin_memory=True)
 
     def val_dataloader(self):
-        return DataLoader(self.data_val, batch_size=self.cfg.batch_size, num_workers=self.cfg.num_workers, shuffle=False)
+        return DataLoader(self.data_val, batch_size=self.cfg.batch_size, num_workers=self.cfg.num_workers, shuffle=False, pin_memory=True)
 
     def test_dataloader(self):
-        return DataLoader(self.data_test, batch_size=self.cfg.batch_size, num_workers=self.cfg.num_workers, shuffle=False)
+        return DataLoader(self.data_test, batch_size=self.cfg.batch_size, num_workers=self.cfg.num_workers, shuffle=False, pin_memory=True)
 
 
 if __name__ == '__main__':
