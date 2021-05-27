@@ -31,11 +31,11 @@ def train(model, hparams, logger):
     dm.setup()
 
     print("Training set contains {} samples".format(len(dm.data_train)))
-
     print("with shape {}".format(dm.data_train[0].shape))
 
     # print detailed summary with estimated network size
-    #summary(model, (hparams.nc, hparams.image_width, hparams.image_height), device="cpu")
+    summary(model, (1, 384, 288), device="cpu")
+
     trainer = Trainer(gpus=hparams.gpus, max_epochs=hparams.max_epochs, logger=logger)
     trainer.fit(model, dm)
 
@@ -57,12 +57,6 @@ def test(model, hparams, test_sets, show=False):
 
         model.encoder = torch.load("trained_models/{}_{}/encoder.pt".format(hparams.season, hparams.dataset))
         model.decoder = torch.load("trained_models/{}_{}/decoder.pt".format(hparams.season, hparams.dataset))
-
-        #print(model)
-        #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        #model = model.to(device)
-        #from torchsummary import summary
-        #summary(model, (1, 64, 192))
 
         model.encoder.eval()
         model.decoder.eval()
@@ -138,7 +132,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # defualt configuration
-    hparams = Namespace(**{'model': 'VQVAE2',
+    hparams = Namespace(**{'model': 'CAE',
                            'dataset': 'day',
                            'season': 'feb',
                            'img_dir': '/home/aau/github/data/thermal/sensor_paper',
