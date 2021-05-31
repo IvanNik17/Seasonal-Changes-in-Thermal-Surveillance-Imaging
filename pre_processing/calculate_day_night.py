@@ -11,7 +11,7 @@ from dateutil import tz
 
 import os
 
-from sunrise_sunset import sun
+from pre_processing.sunrise_sunset import sun
 
 
 
@@ -35,7 +35,7 @@ def add_day_night(metadata, lat = 57.0488, long=9.9217, local_zone = 'Europe/Cop
             print(f"sunrise:{sunrise_datetime.time()}, sunset:{sunset_datetime.time()} {curr_time} it's night")
         
     
-    metadata["Day/Night"] = day_night
+    metadata["Day_Night"] = day_night
     
     return metadata
 
