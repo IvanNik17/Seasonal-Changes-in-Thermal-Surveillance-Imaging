@@ -15,6 +15,8 @@ import seaborn as sns
 import os
 import sys
 
+from statsmodels.tsa.seasonal import seasonal_decompose
+
 path = os.path.join(os.path.dirname(__file__), os.pardir)
 
 if path not in sys.path:
@@ -23,8 +25,35 @@ if path not in sys.path:
 from pre_processing.calculate_day_night import add_day_night
 
 
-def plot_error_vs_other(df, columns,save_dir):
+def calculate_trend(df, column = "MSE", decomp_freq = 30):
+    trend_df = None
+    
+    for model in models:
+        
+        df_curr = df[df["model"] == model]
+        decomposition = seasonal_decompose(df_curr[column], freq=decomp_freq) 
+        trend_ = decomposition.trend
+        
+        if trend_df is None:
+            trend_df = trend_
+        else:
+            trend_df = trend_df.append(trend_)
+            
+    return trend_df
+
+
+def plot_error_vs_other(df, columns, save_dir, smooth = False, decomp_freq = 30):
     #sns.scatterplot(data=df, x="DateTime", y="MSE", hue="model")
+    
+    if smooth:
+        smooth_column = calculate_trend(df, column = columns[1], decomp_freq = decomp_freq)
+        df["smooth"] = smooth_column
+        old_column = columns[1]
+        columns[1] = "smooth"
+        
+        
+    if "DateTime" in columns:
+        df["DateTime"] = pd.to_datetime(df['DateTime'], dayfirst = True).dt.strftime('%m-%d')
     
     f, ax = plt.subplots(figsize=(10, 5))
     pl = sns.lineplot(ax = ax, data=df, x=columns[0], y=columns[1], hue="model")
@@ -34,7 +63,10 @@ def plot_error_vs_other(df, columns,save_dir):
 
     plt.show()
     
-    save_dir = os.path.join(save_dir,f'plot_{columns[0]}_{columns[1]}.png')
+    if smooth:
+        save_dir = os.path.join(save_dir,f'plot_{columns[0]}_{old_column}_smoothed.png')
+    else:
+        save_dir = os.path.join(save_dir,f'plot_{columns[0]}_{columns[1]}.png')
     
     plt.savefig(save_dir)
     
@@ -160,9 +192,9 @@ if __name__ == '__main__':
                 
     calculate_depended_value_corr(df, save_folder)
     
-    plot_error_vs_other(df,["Temperature", "MSE"],save_folder)
+    plot_error_vs_other(df,["Temperature", "MSE"],save_folder,smooth = False)
     
-    plot_error_vs_other(df,["Humidity", "MSE"],save_folder)
+    plot_error_vs_other(df,["Humidity", "MSE"],save_folder,smooth = False)
              
 
 
