@@ -21,8 +21,14 @@ path = os.path.join(os.path.dirname(__file__), os.pardir)
 
 if path not in sys.path:
     sys.path.append(path)
-    
-from pre_processing.calculate_day_night import add_day_night
+
+
+from pre_processing.augment_results import augment_dataframe
+
+
+
+# from loaders.pytorch_lightning.dataset import Dataset
+
 
 
 def calculate_trend(df, column = "MSE", decomp_freq = 30):
@@ -113,50 +119,11 @@ def plot_barplots(df, columns,save_dir):
     plt.savefig(save_dir)
     
 
-def augment_dataframe(df):
-    df = add_day_night(df)
-    
-    df["Hour"] = df["DateTime"].dt.hour
-    
-    
-    weekdays_coding = {
-      0: "Monday",
-      1: "Tuesday",
-      2: "Wednesday",
-      3: "Thursday",
-      4: "Friday",
-      5: "Saturday",
-      6: "Sunday"
-    }
-    
-    df['Weekday'] = df['DateTime'].dt.weekday
-    df['Weekday_name'] = list(map(weekdays_coding.get, df['Weekday']))
-    
-    timeslots_times = np.array([0,3,6,9,12,15,18,21])
 
-    timeslots_coding = {
-      1: "Early Post-Midnight",
-      2: "Late Post-Midnight",
-      3: "Early Morning",
-      4: "Late Morning",
-      5: "Early Afternoon",
-      6: "Late Afternoon",
-      7: "Early Evening",
-      8: "Late Evening",
-    }
-    
-    curr_timeslots = np.searchsorted(timeslots_times, df['DateTime'].dt.hour, side='right')
-    df['Timeslot'] = curr_timeslots
-    
-    df['Timeslot_name'] = list(map(timeslots_coding.get, df['Timeslot']))
-    
-    
-    
-    return df
 
 if __name__ == '__main__':
     
-    method_folder = "VQVAE"
+    method_folder = "CAE"
     
     models = ['feb_day', 'feb_week', 'feb_month']
     months = ['results_jan', 'results_apr', 'results_aug']
@@ -184,25 +151,25 @@ if __name__ == '__main__':
     if not os.path.exists(save_folder):
 
         os.makedirs(save_folder)
-                
+    
    
     df = augment_dataframe(df)
     
-    calculate_correlation_mat(df,save_folder)
+    # calculate_correlation_mat(df,save_folder)
                 
-    calculate_depended_value_corr(df, save_folder)
+    # calculate_depended_value_corr(df, save_folder)
     
-    plot_error_vs_other(df,["Temperature", "MSE"],save_folder,smooth = False)
+    # plot_error_vs_other(df,["Temperature", "MSE"],save_folder,smooth = False)
     
-    plot_error_vs_other(df,["Humidity", "MSE"],save_folder,smooth = False)
+    # plot_error_vs_other(df,["Humidity", "MSE"],save_folder,smooth = False)
              
 
 
-    plot_barplots(df, ["Hour", "MSE"], save_folder)    
+    # plot_barplots(df, ["Hour", "MSE"], save_folder)    
     
-    plot_barplots(df, ["Day_Night", "MSE"], save_folder)   
+    # plot_barplots(df, ["Day_Night", "MSE"], save_folder)   
     
-    plot_barplots(df, ["Timeslot_name", "MSE"], save_folder)
+    # plot_barplots(df, ["Timeslot_name", "MSE"], save_folder)
     
-    plot_barplots(df, ["Weekday_name", "MSE"], save_folder)   
+    # plot_barplots(df, ["Weekday_name", "MSE"], save_folder)   
                 
