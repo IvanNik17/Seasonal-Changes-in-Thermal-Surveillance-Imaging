@@ -17,6 +17,7 @@ if path not in sys.path:
     
 from pre_processing.calculate_day_night import add_day_night, calculate_sunposition
 from pre_processing.activity_calculation import augment_activity
+from pre_processing.count_people import count_people_annotations
 
 
 def augment_dataframe(df):
@@ -43,6 +44,9 @@ def augment_dataframe(df):
     activity_column = pd.concat(df_list)['Activity']
     
     df['Activity'] = activity_column
+    
+    
+    df = count_people_annotations(df)
     
     
     
