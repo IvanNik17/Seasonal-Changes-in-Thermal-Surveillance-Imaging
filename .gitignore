@@ -2,7 +2,6 @@
 trained_models/
 lightning_logs/
 
-visualize_results/results
 visualize_results/CAE/results/plot_DateTime_MSE*
 
 # Byte-compiled / optimized / DLL files

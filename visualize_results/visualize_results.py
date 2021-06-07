@@ -67,8 +67,6 @@ def plot_error_vs_other(df, columns, save_dir, smooth = False, decomp_freq = 30)
     if columns[0] == 'DateTime':
         pl.xaxis.set_major_locator(ticker.MultipleLocator(15))
         # plt.xticks(rotation=45)
-    elif columns[0] == 'Humidity':
-        plt.xlim(0, 100)
     elif columns[0] == 'Hour':
         pl.xaxis.set_major_locator(ticker.MultipleLocator(1))
         plt.xlim(0, 24)
@@ -225,14 +223,15 @@ def models_plot(measurement_x, measurement_y, augment_from_file=False):
 if __name__ == '__main__':
     augment_from_file = True
 
-    # cae_datetime_mse()
+    cae_datetime_mse()
 
-    # models_plot('Temperature', 'MSE')
-    # models_plot('Humidity', 'MSE')
-    # models_plot('Wind Speed', 'MSE')
+    models_plot('Temperature', 'MSE', augment_from_file)
+    models_plot('Humidity', 'MSE', augment_from_file)
+    models_plot('Wind Speed', 'MSE', augment_from_file)
 
     models_plot('Hour', 'Activity', augment_from_file)
-    # models_plot('Hour', 'MSE')
-    # models_plot('Wind Speed', 'MSE_moving_bkgrnd')
-    # models_plot('SunPos_azimuth', 'MSE')
-    # models_plot('SunPos_zenith', 'MSE')
+    models_plot('Hour', 'MSE', augment_from_file)
+    models_plot('Activity', 'MSE', augment_from_file)
+    models_plot('Wind Speed', 'MSE_moving_bkgrnd', augment_from_file)
+    models_plot('SunPos_azimuth', 'MSE', augment_from_file)
+    models_plot('SunPos_zenith', 'MSE', augment_from_file)
