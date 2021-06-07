@@ -11,6 +11,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import seaborn as sns
+from scipy.ndimage import gaussian_filter1d, uniform_filter1d
 
 import os
 import sys
@@ -50,14 +51,26 @@ def calculate_trend(df, column = "MSE", decomp_freq = 30):
 
 def plot_error_vs_other(df, columns, save_dir, smooth = False, decomp_freq = 30):
     #sns.scatterplot(data=df, x="DateTime", y="MSE", hue="model")
-    
+
     if smooth:
-        smooth_column = calculate_trend(df, column = columns[1], decomp_freq = decomp_freq)
-        df["smooth"] = smooth_column
+        # # old smooth using statsmodels for time series data
+        # smooth_column = calculate_trend(df, column = columns[1], decomp_freq = decomp_freq)
+        # df["smooth"] = smooth_column
+
+        # new smoothening (needs to be verified for testing)
+        df = df.reset_index()
+        df['smooth'] = np.nan
+        for model in df['model'].unique():
+            mask = df['model'] == model
+            assert sum(mask) == 300
+            df_model = df[mask]
+            df_model_sorted = df_model.sort_values(by=[columns[0]])
+            df_model_sorted['smooth'] = uniform_filter1d(df_model_sorted[columns[1]], size=10)
+            for index, row in df_model_sorted.iterrows():
+                df.loc[index, 'smooth'] = row['smooth']
         old_column = columns[1]
         columns[1] = "smooth"
-        
-        
+
     if "DateTime" in columns:
         df["DateTime"] = pd.to_datetime(df['DateTime'], dayfirst = True).dt.strftime('%m-%d')
     
@@ -176,7 +189,7 @@ def cae_datetime_mse():
     # plot_barplots(df, ["Weekday_name", "MSE"], save_folder)
 
 
-def models_plot(measurement_x, measurement_y, augment_from_file=False):
+def models_plot(measurement_x, measurement_y, smooth, augment_from_file=False):
     models = ['CAE', 'VQVAE', 'MNAD_recon', 'MNAD_pred']
     splits = ['feb_month']
     months = ['results_jan', 'results_apr', 'results_aug']
@@ -217,21 +230,22 @@ def models_plot(measurement_x, measurement_y, augment_from_file=False):
         # # save augmented dataframe for future loading
         # df.to_csv(augment_save_path, index=False)
 
-    plot_error_vs_other(df, [measurement_x, measurement_y], save_folder, smooth=False)
+    plot_error_vs_other(df, [measurement_x, measurement_y], save_folder, smooth=smooth)
 
 
 if __name__ == '__main__':
+    smooth = True
     augment_from_file = True
 
     cae_datetime_mse()
 
-    models_plot('Temperature', 'MSE', augment_from_file)
-    models_plot('Humidity', 'MSE', augment_from_file)
-    models_plot('Wind Speed', 'MSE', augment_from_file)
+    models_plot('Temperature', 'MSE', smooth, augment_from_file)
+    models_plot('Humidity', 'MSE', smooth, augment_from_file)
+    models_plot('Wind Speed', 'MSE', smooth, augment_from_file)
 
-    models_plot('Hour', 'Activity', augment_from_file)
-    models_plot('Hour', 'MSE', augment_from_file)
-    models_plot('Activity', 'MSE', augment_from_file)
-    models_plot('Wind Speed', 'MSE_moving_bkgrnd', augment_from_file)
-    models_plot('SunPos_azimuth', 'MSE', augment_from_file)
-    models_plot('SunPos_zenith', 'MSE', augment_from_file)
+    models_plot('Hour', 'Activity', smooth, augment_from_file)
+    models_plot('Hour', 'MSE', smooth, augment_from_file)
+    models_plot('Activity', 'MSE', smooth, augment_from_file)
+    models_plot('Wind Speed', 'MSE_moving_bkgrnd', smooth,  augment_from_file)
+    models_plot('SunPos_azimuth', 'MSE', smooth, augment_from_file)
+    models_plot('SunPos_zenith', 'MSE', smooth, augment_from_file)
