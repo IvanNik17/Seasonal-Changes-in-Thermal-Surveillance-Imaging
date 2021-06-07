@@ -16,7 +16,7 @@ from pre_processing.sunrise_sunset import sun
 from pre_processing.sunposition import sunpos
 
 
-def calculate_sunposition(metadata, lat = 57.0488, long=9.9217, local_zone = 'Europe/Copenhagen'):
+def calculate_sunposition(metadata, lat = 57.0488, long=9.9217, local_zone = 'Europe/Copenhagen', verbose=False):
     
     sunpos_az = []
     sunpos_zen = []
@@ -28,11 +28,12 @@ def calculate_sunposition(metadata, lat = 57.0488, long=9.9217, local_zone = 'Eu
           # curr_time = curr_time.astimezone(local_zone)
           # curr_time_utc = curr_time.astimezone(utc_zone)
 
-          az,zen = sunpos(curr_time,lat,long,0)[:2]
-          sunpos_az.append(az)
-          sunpos_zen.append(zen)
+          az, zen = sunpos(curr_time, lat, long, 0)[:2]
+          sunpos_az.append(az.item())
+          sunpos_zen.append(zen.item())
         
-          print(f"time {curr_time} has been processed - {az}, {zen}")
+          if verbose:
+            print(f"time {curr_time} has been processed - {az}, {zen}")
     
     metadata["SunPos_azimuth"] = sunpos_az
     metadata["SunPos_zenith"] = sunpos_zen
