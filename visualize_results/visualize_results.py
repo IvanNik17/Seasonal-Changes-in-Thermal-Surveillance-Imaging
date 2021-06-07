@@ -178,7 +178,7 @@ def cae_datetime_mse():
     # plot_barplots(df, ["Weekday_name", "MSE"], save_folder)
 
 
-def models_plot(measurement_x, measurement_y):
+def models_plot(measurement_x, measurement_y, augment_from_file=False):
     models = ['CAE', 'VQVAE', 'MNAD_recon', 'MNAD_pred']
     splits = ['feb_month']
     months = ['results_jan', 'results_apr', 'results_aug']
@@ -206,20 +206,33 @@ def models_plot(measurement_x, measurement_y):
     if not os.path.exists(save_folder):
         os.makedirs(save_folder)
 
-    df = augment_dataframe(df)
+    augment_save_path = os.path.join('augmented.csv')
+    if augment_from_file:
+        # augment missing columns (activity etc.)
+        df_ = pd.read_csv(augment_save_path)
+        assert len(df) == len(df_)
+        missing_columns = list(set(df_.columns) - set(df.columns))
+        for missing_column in missing_columns:
+            df[missing_column] = df_[missing_column]
+    else:
+        df = augment_dataframe(df)
+        # # save augmented dataframe for future loading
+        # df.to_csv(augment_save_path, index=False)
 
     plot_error_vs_other(df, [measurement_x, measurement_y], save_folder, smooth=False)
 
 
 if __name__ == '__main__':
-    cae_datetime_mse()
+    augment_from_file = True
 
-    models_plot('Temperature', 'MSE')
-    models_plot('Humidity', 'MSE')
-    models_plot('Wind Speed', 'MSE')
+    # cae_datetime_mse()
 
-    models_plot('Hour', 'MSE_moving_bkgrnd')
-    models_plot('Hour', 'MSE')
-    models_plot('Wind Speed', 'MSE_moving_bkgrnd')
-    models_plot('SunPos_azimuth', 'MSE')
-    models_plot('SunPos_zenith', 'MSE')
+    # models_plot('Temperature', 'MSE')
+    # models_plot('Humidity', 'MSE')
+    # models_plot('Wind Speed', 'MSE')
+
+    models_plot('Hour', 'Activity', augment_from_file)
+    # models_plot('Hour', 'MSE')
+    # models_plot('Wind Speed', 'MSE_moving_bkgrnd')
+    # models_plot('SunPos_azimuth', 'MSE')
+    # models_plot('SunPos_zenith', 'MSE')

@@ -20,10 +20,12 @@ from pre_processing.activity_calculation import augment_activity
 from pre_processing.count_people import count_people_annotations
 
 
-def augment_dataframe(df):
-    
+def augment_dataframe(df, save_augmented_df=False):
     mask_path = r"D:\2021_workstuff\Seasonal-Changes-in-Thermal-Surveillance-Imaging\pre_processing\mask_ropes_water.png"
     images_path = r"E:\0_Monthly_videoPipeline\output_image_v3"
+
+    # mask_path = r'/home/jacob/code/Seasonal-Changes-in-Thermal-Surveillance-Imaging/pre_processing/mask_ropes_water.png'
+    # images_path = r'/home/jacob/data/habor/image_dataset'
     
     df_list = []
     for curr_model in df['model'].unique():

@@ -23,7 +23,7 @@ if path not in sys.path:
 from loaders.pytorch_lightning.dataset import Dataset
 
 
-def augment_activity(cfg, show_imgs = False):
+def augment_activity(cfg, show_imgs=False, verbose=False):
     
 
     metadata = cfg['metadata'] 
@@ -70,7 +70,8 @@ def augment_activity(cfg, show_imgs = False):
         
         
         
-        print(f'DIFF {diff.mean()}')
+        if verbose:
+            print(f'i: {i:3d} DIFF {diff.mean()}')
         
         if show_imgs:
             show_img = cv2.vconcat([img_curr, img_next, diff])
