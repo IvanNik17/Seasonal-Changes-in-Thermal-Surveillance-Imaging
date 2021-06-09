@@ -103,6 +103,10 @@ def plot_error_vs_other(df, columns, save_dir, smooth, normalize, decomp_freq=30
         pl.xaxis.set_major_locator(ticker.MultipleLocator(1))
         plt.xlim(0, 24)
 
+    if normalize:
+        plt.ylim(0, 1)
+
+
     save_filename = f'plot_{columns[0]}_{columns[1]}'
     if smooth:
         save_filename += '_smooth'
@@ -154,7 +158,7 @@ def plot_barplots(df, columns,save_dir):
     plt.savefig(save_dir)
 
 
-def save_figure(figure, destination_path, save_pdf=False):
+def save_figure(figure, destination_path, save_pdf=True):
     destination_dirname = os.path.dirname(destination_path)
     if not os.path.exists(destination_dirname):
         os.makedirs(destination_dirname)
@@ -163,8 +167,11 @@ def save_figure(figure, destination_path, save_pdf=False):
     figure.savefig(figure_file_path, bbox_inches='tight', pad_inches=0.1, dpi=100)
 
     if save_pdf:
-        figure_file_path_pdf = figure_file_path.replace('.png', '.pdf')
-        figure.savefig(figure_file_path_pdf, bbox_inches='tight', pad_inches=0.1, dpi=100)
+        destination_path = destination_path.replace('.png', '.pdf')
+        split = list(os.path.split(destination_path))
+        split.insert(-1, 'pdf')
+        destination_path = os.path.join(split[0], split[1], split[2])
+        save_figure(figure, destination_path, save_pdf=False)
 
 def cae_datetime_mse():
     method_folder = "CAE"

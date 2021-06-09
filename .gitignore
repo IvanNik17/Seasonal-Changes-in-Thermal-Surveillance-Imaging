@@ -5,6 +5,7 @@ lightning_logs/
 visualize_results/CAE/results/plot_DateTime_MSE*
 visualize_results/MNAD_recon/results/
 visualize_results/MNAD_pred/results/
+visualize_results/results/pdf
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
