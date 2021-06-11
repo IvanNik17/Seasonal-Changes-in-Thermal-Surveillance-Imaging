@@ -259,6 +259,58 @@ def models_plot(measurement_x, measurement_y, smooth=False, normalize=False, aug
     plot_error_vs_other(df, [measurement_x, measurement_y], save_folder, smooth, normalize)
 
 
+def object_detection_plot(measurement_x, measurement_y, smooth=False, normalize=False, augment_from_file=False):
+    models = ['YOLOv5']
+    splits = ['feb_month']
+    months = ['gt_tp_fn_pred_fp']
+
+    df = None
+    for model in models:
+        for split in splits:
+            for month in months:
+                path = os.path.join(model, split, month+'.txt')
+                df_ = pd.read_csv(path, header=None, names=['image_name', 'nr_ground_truth', 'nr_true_positives', 'nr_false_negatives', 'nr_predicted_persons', 'nr_false_positives'])
+
+                df_["DateTime"] = df_['image_name'].str[:8]
+                df_["DateTime"] = pd.to_datetime(df_['DateTime'], dayfirst=True)
+
+                df_['model'] = model
+                df_['split'] = split
+                df_['month'] = month
+
+                df_['precision'] = df_['nr_true_positives'] / (df_['nr_true_positives'] + df_['nr_false_positives'])
+                df_['recall'] = df_['nr_true_positives'] / (df_['nr_true_positives'] + df_['nr_false_negatives'])
+                df_['accuracy'] = df_['nr_true_positives'] / (df_['nr_true_positives'] + df_['nr_false_positives'] + df_['nr_false_negatives'])
+                df_['f1_score'] = 2 * df_['nr_true_positives'] / (2 * df_['nr_true_positives'] + df_['nr_false_positives'] + df_['nr_false_negatives'])
+
+                # ignore all frames without pedestrian annotations
+                df_ = df_[df_['nr_ground_truth'] > 0]
+
+                if df is None:
+                    df = df_
+                else:
+                    df = df.append(df_)
+
+    save_folder = os.path.join("results")
+    if not os.path.exists(save_folder):
+        os.makedirs(save_folder)
+
+    # augment_save_path = os.path.join('augmented.csv')
+    # if augment_from_file:
+    #     # augment missing columns (activity etc.)
+    #     df_ = pd.read_csv(augment_save_path)
+    #     assert len(df) == len(df_)
+    #     missing_columns = list(set(df_.columns) - set(df.columns))
+    #     for missing_column in missing_columns:
+    #         df[missing_column] = df_[missing_column]
+    # else:
+    #     df = augment_dataframe(df)
+    #     # # save augmented dataframe for future loading
+    #     # df.to_csv(augment_save_path, index=False)
+
+    plot_error_vs_other(df, [measurement_x, measurement_y], save_folder, smooth, normalize)
+
+
 if __name__ == '__main__':
     smooth = True
     normalize = True
@@ -277,7 +329,7 @@ if __name__ == '__main__':
     # models_plot('SunPos_zenith', 'MSE', smooth, normalize, augment_from_file)
 
     # # no drift over activity
-    # models_plot('Hour', 'Num Annotations', smooth, normalize, augment_from_file)
+    # models_plot('Hour', 'Num Annotations', False, False, augment_from_file)
     # models_plot('Hour', 'Activity', smooth, normalize, augment_from_file)
     # models_plot('Num Annotations', 'MSE', smooth, normalize, augment_from_file)
     # models_plot('Num Annotations', 'MSE_moving_bkgrnd', smooth, normalize, augment_from_file)
@@ -285,3 +337,8 @@ if __name__ == '__main__':
     # models_plot('Hour', 'MSE_moving_bkgrnd', smooth, normalize, augment_from_file)
     # models_plot('Activity', 'MSE', smooth, normalize, augment_from_file)
     # models_plot('Activity', 'MSE_moving_bkgrnd', smooth, normalize, augment_from_file)
+
+    object_detection_plot('DateTime', 'precision', False, False, False)
+    object_detection_plot('DateTime', 'recall', False, False, False)
+    object_detection_plot('DateTime', 'accuracy', False, False, False)
+    object_detection_plot('DateTime', 'f1_score', False, False, False)
