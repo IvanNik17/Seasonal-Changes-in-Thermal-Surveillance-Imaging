@@ -6,6 +6,7 @@ visualize_results/CAE/results/plot_DateTime_MSE*
 visualize_results/MNAD_recon/results/
 visualize_results/MNAD_pred/results/
 visualize_results/results/pdf
+visualize_results/results/object_detection/pdf
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
