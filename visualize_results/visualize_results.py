@@ -291,7 +291,7 @@ def object_detection_plot(measurement_x, measurement_y, smooth=False, normalize=
                 else:
                     df = df.append(df_)
 
-    save_folder = os.path.join("results")
+    save_folder = os.path.join("results", "object_detection")
     if not os.path.exists(save_folder):
         os.makedirs(save_folder)
 
@@ -320,7 +320,7 @@ if __name__ == '__main__':
     # cae_datetime_mse()
 
     # drift over environmental factors
-    # models_plot('Temperature', 'MSE', smooth, normalize, augment_from_file)
+    # models_plot('Temperature', 'MSE', smooth, False, augment_from_file)
     # models_plot('Humidity', 'MSE', smooth, normalize, augment_from_file)
     # no drift over environmental factors
     # models_plot('Wind Speed', 'MSE', smooth, normalize, augment_from_file)
