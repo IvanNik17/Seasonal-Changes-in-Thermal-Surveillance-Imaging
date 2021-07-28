@@ -243,7 +243,7 @@ def models_plot(measurement_x, measurement_y, smooth=False, normalize=False, aug
     if not os.path.exists(save_folder):
         os.makedirs(save_folder)
 
-    augment_save_path = os.path.join('augmented.csv')
+    augment_save_path = os.path.join('augmented_mse.csv')
     if augment_from_file:
         # augment missing columns (activity etc.)
         df_ = pd.read_csv(augment_save_path)
@@ -295,18 +295,18 @@ def object_detection_plot(measurement_x, measurement_y, smooth=False, normalize=
     if not os.path.exists(save_folder):
         os.makedirs(save_folder)
 
-    # augment_save_path = os.path.join('augmented.csv')
-    # if augment_from_file:
-    #     # augment missing columns (activity etc.)
-    #     df_ = pd.read_csv(augment_save_path)
-    #     assert len(df) == len(df_)
-    #     missing_columns = list(set(df_.columns) - set(df.columns))
-    #     for missing_column in missing_columns:
-    #         df[missing_column] = df_[missing_column]
-    # else:
-    #     df = augment_dataframe(df)
-    #     # # save augmented dataframe for future loading
-    #     # df.to_csv(augment_save_path, index=False)
+    augment_save_path = os.path.join('augmented_f1_score.csv')
+    if augment_from_file:
+        # augment missing columns (activity etc.)
+        df_ = pd.read_csv(augment_save_path)
+        assert len(df) == len(df_)
+        missing_columns = list(set(df_.columns) - set(df.columns))
+        for missing_column in missing_columns:
+            df[missing_column] = df_[missing_column]
+    else:
+        df = augment_dataframe(df)
+        # # save augmented dataframe for future loading
+        # df.to_csv(augment_save_path, index=False)
 
     plot_error_vs_other(df, [measurement_x, measurement_y], save_folder, smooth, normalize)
 

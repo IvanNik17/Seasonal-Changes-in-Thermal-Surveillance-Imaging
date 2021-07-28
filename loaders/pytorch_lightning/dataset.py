@@ -115,9 +115,9 @@ if __name__ == '__main__':
 
     metadata["DateTime"] = pd.to_datetime(metadata['DateTime'], dayfirst = True)
 
-    metadata_selected = metadata[(metadata["DateTime"].dt.day>=1) & (metadata["DateTime"].dt.day<=7) & (metadata["DateTime"].dt.month==2)]
+    # metadata_selected = metadata[(metadata["DateTime"].dt.day>=1) & (metadata["DateTime"].dt.day<=7) & (metadata["DateTime"].dt.month==2)]
 
-    dataset = Dataset(img_dir=images_path, metadata = metadata_selected, return_metadata = True)
+    dataset = Dataset(img_dir=images_path, selection = metadata, return_metadata = True)
 
     # trial = next(iter(dataset))
 
