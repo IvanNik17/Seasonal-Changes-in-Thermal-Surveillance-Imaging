@@ -66,6 +66,7 @@ python run_exp.py -exp month -path "/path_where_images_are_located" -train True
 ```
 
 For MNAD_pred and MNAD_recon
+
 For training
 ```bash
 python Train.py -method recon -dataset_type one_month -exp_dir "/dir_to_save_trained_model" -datasplit_dir "/dir_where_dataspits_are"
