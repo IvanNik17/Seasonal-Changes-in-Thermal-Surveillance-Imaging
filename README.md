@@ -7,6 +7,12 @@ Repo containing the code for extracting data from the "Danish Seasonal Thermal S
 
 - OpenCV
 - Python 3
+- Pandas
+- Numpy
+- Pytorch
+- Scikit-learn
+- Seaborn (optional)
+- Scipy
 
 ## Usage
 
