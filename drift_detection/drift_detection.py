@@ -118,32 +118,37 @@ def find_large_drift_start(train_data, test_data, check_consecutive = 7, outlier
     train_data = train_data[tested_columns]
     test_data = test_data[tested_columns]
     
-    scaler = preprocessing.MinMaxScaler()
+    scaler = preprocessing.StandardScaler()
     train_data_norm = scaler.fit_transform(train_data)
-    test_data_norm = scaler.fit_transform(test_data)
+    test_data_norm = scaler.transform(test_data)
+
 
     train_data_norm = pd.DataFrame(train_data_norm, columns = tested_columns)
     test_data_norm = pd.DataFrame(test_data_norm, columns = tested_columns)
     
     
-    clf_svm = oneClassSVM_train(train_data_norm, outliers_fraction)
-    clf_if = isolationForest_train(train_data_norm, outliers_fraction)
+    clf_svm = oneClassSVM_train(train_data_norm, outlier_fraction)
+    clf_if = isolationForest_train(train_data, outlier_fraction)
 
     
     all_svm = []
     all_if = []
+    all_of=[]
     
     all_score_svm = []
     all_score_if=[]
     
     
     
+    
+    
     # For each day in the test data use the outlier detectors to detect outlier vertices
     
     for day in test_data_full["Folder name"].unique():
-        curr_test = test_data_norm[test_data_full["Folder name"] == day]
+        curr_test_norm = test_data_norm[test_data_full["Folder name"] == day]
+        curr_test = test_data[test_data_full["Folder name"] == day]
         
-        score_svm, outlier_rows_svm = oneClassSVM_pred(curr_test, clf_svm)
+        score_svm, outlier_rows_svm = oneClassSVM_pred(curr_test_norm, clf_svm)
         
         score_if, outlier_rows_if = isolationForest_pred(curr_test, clf_if)
         
@@ -153,7 +158,9 @@ def find_large_drift_start(train_data, test_data, check_consecutive = 7, outlier
         
         all_if.append(outlier_rows_if)
         
-        all_score_if.append(score_if)        
+        all_score_if.append(score_if)     
+        
+        # print(score_svm)
         
         print(f"day {day} finished")
         
@@ -183,7 +190,7 @@ if __name__ == "__main__":
     test_path_pt2 = 'cae_results_metadata_fullDataset_testing_pt2.csv'
     
     check_consecutive = 7
-    outliers_fraction = 0.02
+    outliers_fraction = 0.05
 
 
     train_data = pd.read_csv(train_path)
@@ -193,6 +200,7 @@ if __name__ == "__main__":
     
     test_data = pd.concat([test_data_pt1, test_data_pt2])
     
+    
     test_data = test_data.reset_index()
     
     
@@ -200,8 +208,9 @@ if __name__ == "__main__":
     train_data['DateTime'] = pd.to_datetime(train_data['DateTime'], dayfirst = True)
     test_data['DateTime'] = pd.to_datetime(test_data['DateTime'], dayfirst = True)
     
+    
 
-    find_large_drift_start(train_data, test_data, check_consecutive = 7, outlier_fraction = 0.02)
+    returned_vals = find_large_drift_start(train_data, test_data, check_consecutive = check_consecutive, outlier_fraction = outliers_fraction)
     
     
     
