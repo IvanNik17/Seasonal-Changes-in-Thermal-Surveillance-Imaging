@@ -118,7 +118,7 @@ def find_large_drift_start(train_data, test_data, check_consecutive = 7, outlier
     train_data = train_data[tested_columns]
     test_data = test_data[tested_columns]
     
-    scaler = preprocessing.StandardScaler()
+    scaler = preprocessing.MinMaxScaler()
     train_data_norm = scaler.fit_transform(train_data)
     test_data_norm = scaler.transform(test_data)
 
