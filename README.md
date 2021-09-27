@@ -20,11 +20,8 @@ Training and testing code for all used models is provided in the **Models** dire
 
 **Download and extract dataset**
 
-Download from X and extract both daily video directories in a suitable location
+Download from https://www.kaggle.com/ivannikolov/longterm-thermal-drift-dataset and extract both daily video directories in a suitable location. You can read more about the dataset composition, as well as the captured metadata in Kaggle.
 
-```bash
-wget ...
-```
 
 **Extract frames from video**
 
