@@ -16,6 +16,8 @@ Repo containing the code for extracting data from the "Danish Seasonal Thermal S
 
 ## Usage
 
+Training and testing code for all used models is provided in the **Models** directory. The architecture of the models is not changed, except for switching the input channels from 3 to 1, corresponding with to the change from RGB to Grayscale.
+
 **Download and extract dataset**
 
 Download from X and extract both daily video directories in a suitable location
