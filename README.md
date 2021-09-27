@@ -79,13 +79,29 @@ python test_harbor.py -method recon -dataset_path "/path_where_images_are_locate
 ```
 
 For YOLOv5 
+
+For training
 ```bash
-python ..."
+python train.py -img 384 -batch 16 -epochs 100 -data custom_data_harbor.yaml -weights yolov5s.pt
+```
+
+For testing
+```bash
+python test.py -weights yolov5s.pt -data custom_data_harbor.yaml -img 384 -iou 0.65
 ```
 
 For Faster R-CNN 
+
+For training
 ```bash
-python ..."
+python train.py"
+
+```
+For testing
+```bash
+python eval.py"
+python eval_per_im.py
+
 ```
 
 **Visualizing and Augmenting Results**
