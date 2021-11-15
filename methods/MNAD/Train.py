@@ -89,7 +89,7 @@ if args.dataset_type == 'one_day':
 elif args.dataset_type == 'one_week': 
     train_folder = os.path.join(args.datasplit_dir, 'feb_week_5000.csv')
 elif args.dataset_type == 'one_month': 
-    train_folder = os.path.join(args.datasplit_dir, 'feb_week_5000.csv')
+    train_folder = os.path.join(args.datasplit_dir, 'feb_month_5000.csv')
 
 # Loading dataset
 train_dataset = DataLoader('train',train_folder, transforms.Compose([
