@@ -61,8 +61,8 @@ def make_imagesets(cfg):
 
     #  go through all the clips in the dataset, cut them in images and save them
     metadata_list = []
-    for i, sample in enumerate(dataset):
-        img, path, curr_metadata = sample
+    for i in range(len(dataset):
+        img, path, curr_metadata = dataset._getitem__(i)
         curr_metadata = curr_metadata.split(',')
         #  save dir for all the images from each clip
         save_dir = os.path.join(cfg['main_save_path'],curr_metadata[0],curr_metadata[1])
